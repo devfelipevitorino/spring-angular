@@ -27,7 +27,7 @@ Este projeto é um sistema de Help Desk desenvolvido com **Spring Boot** e **Jav
   - Spring Data JPA
   - Spring Security
   - Spring Web
-- **Banco de Dados**: H2 (em memória)
+- **Banco de Dados**: H2 (em memória para teste) e MySQL (para desenvolvimento)
 - **Autenticação**: JWT (JSON Web Tokens)
 
 ### Frontend
