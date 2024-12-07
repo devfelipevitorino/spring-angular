@@ -11,7 +11,7 @@ Este projeto é um sistema de Help Desk desenvolvido com **Spring Boot** e **Jav
 
 ### Técnico
 - **Visualização de Chamados**: Acompanhar a lista de chamados designados.
-- **Atualização de Status**: Alterar o status de um chamado (e.g., "Aberto", "Em andamento", "Concluído").
+- **Atualização de Status**: Alterar o status de um chamado ("Aberto", "Em andamento", "Concluído").
 - **Resolução de Problemas**: Registrar as soluções aplicadas nos chamados.
 
 ### Administrador
@@ -27,7 +27,7 @@ Este projeto é um sistema de Help Desk desenvolvido com **Spring Boot** e **Jav
   - Spring Data JPA
   - Spring Security
   - Spring Web
-- **Banco de Dados**: H2 (em memória)
+- **Banco de Dados**: H2 (em memória para teste) e MySQL (para desenvolvimento)
 - **Autenticação**: JWT (JSON Web Tokens)
 
 ### Frontend
