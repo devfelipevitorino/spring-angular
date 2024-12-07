@@ -1,66 +1,49 @@
-package com.helpdesk.app.entity;
+package com.helpdesk.app.DTO;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.hibernate.validator.constraints.br.CPF;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.helpdesk.app.entity.Tecnico;
 import com.helpdesk.app.enums.Perfil;
 
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
-@Entity
-public abstract class Pessoa implements Serializable{
+public class TecnicoDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
 	protected Integer id;
+	@NotNull(message = "O campo NOME é obrigatório")
 	protected String nome;
-	
-	@CPF
-	@Column(unique = true)
+	@NotNull(message = "O campo CPF é obrigatório")
 	protected String cpf;
-	
-	@Email
-	@Column(unique = true)
+	@NotNull(message = "O campo EMAIL é obrigatório")
 	protected String email;
-	
+	@NotNull(message = "O campo SENHA é obrigatório")
 	protected String senha;
-	
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "PERFIS")
 	protected Set<Integer> perfis = new HashSet<>();
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate dataCriacao = LocalDate.now();
-	
-	public Pessoa() {
+
+	public TecnicoDTO() {
 		super();
-		addPerfil(Perfil.CLIENTE);
+		setPerfis(Perfil.TECNICO);
 	}
 
-	public Pessoa(Integer id, String nome, String cpf, String email, String senha) {
+	public TecnicoDTO(Tecnico obj) {
 		super();
-		this.id = id;
-		this.nome = nome;
-		this.cpf = cpf;
-		this.email = email;
-		this.senha = senha;
-		addPerfil(Perfil.CLIENTE);
+		this.id = obj.getId();
+		this.nome = obj.getNome();
+		this.cpf = obj.getCpf();
+		this.email = obj.getEmail();
+		this.senha = obj.getSenha();
+		this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
+		this.dataCriacao = obj.getDataCriacao();
+		setPerfis(Perfil.TECNICO);
 	}
 
 	public Integer getId() {
@@ -107,7 +90,7 @@ public abstract class Pessoa implements Serializable{
 		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
 	}
 
-	public void addPerfil(Perfil perfil) {
+	public void setPerfis(Perfil perfil) {
 		this.perfis.add(perfil.getCodigo());
 	}
 
@@ -118,21 +101,7 @@ public abstract class Pessoa implements Serializable{
 	public void setDataCriacao(LocalDate dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(cpf, id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Pessoa other = (Pessoa) obj;
-		return Objects.equals(cpf, other.cpf) && Objects.equals(id, other.id);
-	}
+	
+	
+	
 }
