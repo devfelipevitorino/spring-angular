@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.helpdesk.app.DTO.ClienteDTO;
@@ -25,6 +27,10 @@ public class ClienteService {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 	
+	@Autowired
+	@Lazy
+    private BCryptPasswordEncoder enconder;
+	
 	public Cliente findById(Integer id) {
 		Optional<Cliente> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
@@ -36,6 +42,7 @@ public class ClienteService {
 
 	public Cliente create(ClienteDTO objDto) {
 		objDto.setId(null);
+		objDto.setSenha(enconder.encode(objDto.getSenha()));
 		validaEmailECpf(objDto);
 		Cliente newObj = new Cliente(objDto);
 		return repository.save(newObj);
